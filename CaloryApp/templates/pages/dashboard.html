@@ -1,0 +1,83 @@
+{% extends 'base/base.html' %} 
+
+{% block content %}
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="h3 mb-0 text-gray-800">Welcome, {{ request.user.username }}</h1>
+                <p class="text-muted">Here is your daily caloric overview.</p>
+            </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm border-start border-info border-5">
+                    <div class="card-body">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Target BMR</div>
+                        <div class="h4 mb-0 fw-bold">{{ take_bmr }} <small class="text-muted">kcal</small></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm border-start border-warning border-5">
+                    <div class="card-body">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Consumed</div>
+                        <div class="h4 mb-0 fw-bold">{{ consume_calory }} <small class="text-muted">kcal</small></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm border-start {% if need_calory < 0 %}border-danger{% else %}border-success{% endif %} border-5">
+                    <div class="card-body">
+                        <div class="text-xs font-weight-bold {% if need_calory < 0 %}text-danger{% else %}text-success{% endif %} text-uppercase mb-1">
+                            {% if need_calory < 0 %}Surplus{% else %}Remaining{% endif %}
+                        </div>
+                        <div class="h4 mb-0 fw-bold">{{ need_calory}} <small class="text-muted">kcal</small></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white py-3">
+                        <h6 class="m-0 fw-bold text-primary">Your Profile Details</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Date Updated</th>
+                                        <th>Weight</th>
+                                        <th>Height</th>
+                                        <th>Calculated BMR</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in data %}
+                                    <tr>
+                                        <td>{{ item.created_at|date:"M d, Y" }}</td>
+                                        <td>{{ item.weight }} kg</td>
+                                        <td>{{ item.height }} cm</td>
+                                        <td><span class="badge bg-secondary">{{ item.bmr }}</span></td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">No profile data found.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+{% endblock content %}
